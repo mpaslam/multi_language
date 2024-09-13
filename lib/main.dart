@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
             supportedLocales: const [
               Locale('en', 'US'),
               Locale('es', 'ES'),
+              Locale('ar', 'SA'), // Added Arabic locale support
             ],
             localizationsDelegates: const [
               AppLocalizations.delegate,
@@ -59,6 +60,16 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Locale currentLocale = context.read<LocaleBloc>().state.locale;
+
+    // Set image based on the selected language
+    String imagePath;
+    if (currentLocale.languageCode == 'es') {
+      imagePath = 'assest/batman.webp'; // Arabic image
+    } else {
+      imagePath = 'assest/spider.webp'; // English image
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.translate('welcome') ?? 'Welcome'),
@@ -70,6 +81,7 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Image.asset(imagePath), // Display the image
             Text(AppLocalizations.of(context)!.translate('hello') ?? 'Hello'),
             ElevatedButton(
               onPressed: () => Navigator.pushNamed(context, '/page1'),
@@ -104,6 +116,10 @@ class LanguageSwitcher extends StatelessWidget {
         const PopupMenuItem<Locale>(
           value: Locale('es', 'ES'),
           child: Text("Español"),
+        ),
+        const PopupMenuItem<Locale>(
+          value: Locale('ar', 'SA'),
+          child: Text("العربية"), // Arabic
         ),
       ],
     );
